@@ -24,30 +24,18 @@ import Pagination from "./Pagination";
 
 function Home() {
   const [data, setData] = useState([]);
-  const [filterBy, setFilterBy] = useState("");
-  const [sortBy, setSortBy] = useState("original_launch");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [order, setOrder] = useState("asc");
   const [totalpages, setTotalPages] = useState(4);
   const [openCapsuleModal, setOpenCapsuleModal] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [overlay, setOverlay] = useState(null);
   const [selectedCapsule, setSelectedCapsule] = useState(null);
+  const [filterStatus, setFilterStatus] = useState("");
 
-  const OverlayTwo = () => (
-    <ModalOverlay
-      bg="none"
-      backdropFilter="auto"
-      backdropInvert="80%"
-      backdropBlur="2px"
-    />
-  );
-
-  async function Getcapsule({ limit, filterBy, sortBy, order, page }) {
+  async function Getcapsule({ limit, filterStatus, filterType, order, page }) {
     try {
       const response = await axios.get(
-        `https://api.spacexdata.com/v3/capsules?limit=${limit}&filter=${filterBy}&sort=${sortBy}&order=${order}&page=${page}`
+        `https://api.spacexdata.com/v3/capsules?limit=${limit}&status=${filterStatus}&page=${page}`
       );
 
       setData(response.data);
@@ -57,32 +45,46 @@ function Home() {
       console.error("Error fetching data:", error);
     }
   }
+
+  function formatDate(dateString) {
+    if (!dateString) return "";
+
+    const dateParts = dateString.split("T");
+    const formattedDate = `${dateParts[0]}`;
+
+    return formattedDate;
+  }
+
   //filter function
   const handleFilter = () => {
-    Getcapsule({ limit, filterBy, sortBy, order, page });
+    Getcapsule({ limit, filterStatus, page });
   };
 
   useEffect(() => {
-    Getcapsule({ limit, filterBy, sortBy, order, page });
-  }, [limit, filterBy, sortBy, order, page]);
+    Getcapsule({ limit, filterStatus, page });
+  }, [limit, filterStatus, page]);
 
   return (
     <Box as="center" className="main_data_box">
       <Box m={"2rem 0"} display={"flex"} justifyContent={"space-evenly"}>
         <HStack spacing={3}>
           <Input
+            type="text"
             variant="outline"
-            placeholder="Type anything"
-            onChange={(e) => setLimit(e.target.value)}
+            placeholder="Filter by Status"
+            value={filterStatus}
+            onChange={(e) => setFilterStatus(e.target.value)}
           />
-          <Button
-            backgroundColor="#2B6CB0"
-            color="white"
-            marginRight="3rem"
-            onClick={handleFilter}
+          <Select
+            w={"400px"}
+            variant="unstyled"
+            placeholder="Limit"
+            onChange={(e) => setLimit(e.target.value)}
           >
-            Apply
-          </Button>
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+          </Select>
 
           <Select
             w={"400px"}
@@ -94,9 +96,16 @@ function Home() {
             <option value="10">10</option>
             <option value="15">15</option>
           </Select>
+          <Button
+            backgroundColor="#2B6CB0"
+            color="white"
+            marginRight="3rem"
+            onClick={handleFilter}
+          >
+            Clear Filter
+          </Button>
         </HStack>
       </Box>
-
       <SimpleGrid
         columns={{ lg: 4, md: 2, sm: 1, base: 1 }}
         justifyContent={"Center"}
@@ -112,9 +121,19 @@ function Home() {
                     "https://media.istockphoto.com/id/935294048/vector/the-pill.jpg?s=612x612&w=0&k=20&c=bhhQ6-fT-X1JIMiFPXT5Ogn97fTnpDgcJsvWxAdNDKI="
                   }
                 />
-                <Text>Capsule id:{e.capsule_id}</Text>
-                <Text>Type: {e.type}</Text>
-                <Text>Status: {e.status}</Text>
+                <Text className="blue-text">
+                  <strong className="bold-blue">Capsule id:</strong>{" "}
+                  {e.capsule_id}
+                </Text>
+                <Text className="blue-text">
+                  {" "}
+                  <strong className="bold-blue">Type:</strong> {e.type}
+                </Text>
+                <Text className="blue-text">
+                  {" "}
+                  <strong className="bold-blue">Status:</strong> {e.status}
+                </Text>
+
                 <Button
                   className="modal_btn"
                   onClick={() => {
@@ -155,24 +174,54 @@ function Home() {
           <ModalCloseButton />
           <ModalBody>
             {selectedCapsule && (
-              <>
-                <Text>Capsule id: {selectedCapsule.capsule_id}</Text>
-                <Text>Type: {selectedCapsule.type}</Text>
-                <Text>Status: {selectedCapsule.status}</Text>
-                <Text>Details: {selectedCapsule.details}</Text>
-                <Text>Capsule serial: {selectedCapsule.capsule_serial}</Text>
-                <Text>Missions:</Text>
-                {selectedCapsule.missions?.map((mission, missionIndex) => (
-                  <div key={missionIndex}>
-                    <Text>Mission Name: {mission?.name}</Text>
-                    <Text>Mission Flight: {mission?.flight}</Text>
-                  </div>
-                ))}
-                <Text>
-                  Original launch unix: {selectedCapsule?.original_launch_unix}
-                </Text>
-                <Text>Original launch: {selectedCapsule?.original_launch}</Text>
-              </>
+              <table style={{ width: "100%" }}>
+                <tbody>
+                  <tr>
+                    <th>Details:</th>
+                    <td>{selectedCapsule.details}</td>
+                  </tr>
+                  <tr>
+                    <th>Capsule id:</th>
+                    <td>{selectedCapsule.capsule_id}</td>
+                  </tr>
+                  <tr>
+                    <th>Type:</th>
+                    <td>{selectedCapsule.type}</td>
+                  </tr>
+                  <tr>
+                    <th>Status:</th>
+                    <td>{selectedCapsule.status}</td>
+                  </tr>
+                  <tr>
+                    <th>Capsule serial:</th>
+                    <td>{selectedCapsule.capsule_serial}</td>
+                  </tr>
+                  <tr>
+                    <th>Missions:</th>
+                    <td></td>
+                  </tr>
+                  {selectedCapsule.missions?.map((mission, missionIndex) => (
+                    <>
+                      <tr key={missionIndex}>
+                        <th>Mission Name:</th>
+                        <td>{mission?.name}</td>
+                      </tr>
+                      <tr>
+                        <th>Original Launch Date:</th>
+                        <td>{formatDate(mission?.original_launch)}</td>
+                      </tr>
+                    </>
+                  ))}
+                  <tr>
+                    <th>Original launch unix:</th>
+                    <td>{selectedCapsule?.original_launch_unix}</td>
+                  </tr>
+                  <tr>
+                    <th>Original launch:</th>
+                    <td>{formatDate(selectedCapsule?.original_launch)}</td>
+                  </tr>
+                </tbody>
+              </table>
             )}
           </ModalBody>
           <ModalFooter>

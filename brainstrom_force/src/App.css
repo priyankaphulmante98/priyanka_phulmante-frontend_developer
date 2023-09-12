@@ -6,7 +6,6 @@ body {
 }
 
 /* Navbar css starts here */
-
 * {
   margin: 0;
   padding: 0;
@@ -34,6 +33,7 @@ nav {
 nav ul li {
   display: inline-block;
   padding: 15px 25px;
+  cursor: pointer;
 }
 nav ul li a {
   text-decoration: none;
@@ -62,7 +62,6 @@ nav ul li a {
   nav {
     display: none;
     width: 100%;
-    /* border-top: 1px solid red; */
     margin-top: 30px;
     padding-top: 20px;
   }
@@ -115,9 +114,9 @@ nav ul li a {
   }
 }
 
-/* Data Home page css starts here  */
+/* Home page Data css starts here  */
 
-input[type="text"] {
+input[type="text"], Select {
   width: 50%;
   padding: 12px;
   border: 1px solid #ccc;
@@ -125,8 +124,10 @@ input[type="text"] {
   border-radius: 10px;
   margin-top: 10px;
   margin-bottom: 16px;
-  font-size: 20px;
+  /* font-size: 20px; */
+  text-align: center;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  color:gray;
 }
 
 .capuslu_div {
@@ -137,13 +138,15 @@ input[type="text"] {
   cursor: pointer;
   font-size: 14px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  margin-bottom: 20px;
+  margin: 30px 0px 0px 0px;
 }
 
 .capuslu_div img {
   width: 330px;
   height: 280px;
-  margin-bottom: 15px;
+  margin: 10px 0px 15px 0px ;
+  border-radius: 20px;
+    border-radius: 20px;
 }
 
 .modal_btn {
@@ -156,4 +159,35 @@ input[type="text"] {
 
 .main_data_box {
   padding: 10px 20px 20px 20px;
+}
+
+td{
+width:50%;
+}
+th{
+  width:50%;
+  font-weight: bold;
+  text-align: left;
+  }
+
+  .bold-blue {
+    font-weight: bold;
+    color: rgb(5, 5, 50);
+  }
+  
+  .blue-text {
+    color: rgb(5, 5, 50);
+  }
+
+/* Footer css Starts here */
+
+.css-1gx57aq {
+  /* background: var(--chakra-colors-gray-50); */
+  background-color: rgb(5, 5, 41) !important;
+  /* color: var(--chakra-colors-gray-700); */
+  color: white !important;
+  font-size:20px;
+  height:400px;
+  padding-top:50px;
+
 }
