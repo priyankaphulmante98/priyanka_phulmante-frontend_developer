@@ -1,4 +1,3 @@
-
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
@@ -24,8 +23,8 @@ header {
 .logo {
   float: left;
   margin-left: 30px;
-  height:30px;
-  width:100px;
+  height: 30px;
+  width: 100px;
 }
 nav {
   float: left;
@@ -45,7 +44,7 @@ nav ul li a {
   position: absolute;
   right: 80px;
   top: 22px;
-  display: block;
+  display: none;
 }
 .toggle-btn span {
   display: inline-block;
@@ -116,18 +115,21 @@ nav ul li a {
 
 /* Home page Data css starts here  */
 
-input[type="text"], Select {
-  width: 50%;
-  padding: 12px;
+input[type="text"],
+input[type="date"],
+Select {
+  width: 100%;
   border: 1px solid #ccc;
   border-radius: 2px;
   border-radius: 10px;
   margin-top: 10px;
   margin-bottom: 16px;
-  /* font-size: 20px; */
   text-align: center;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  color:gray;
+  color: gray;
+}
+.main_data_box {
+  padding: 10px 20px 20px 20px;
 }
 
 .capuslu_div {
@@ -144,9 +146,14 @@ input[type="text"], Select {
 .capuslu_div img {
   width: 330px;
   height: 280px;
-  margin: 10px 0px 15px 0px ;
+  margin: 10px 0px 15px 0px;
   border-radius: 20px;
-    border-radius: 20px;
+  border-radius: 20px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.capuslu_div img:hover {
+  transform: scale(1.05);
 }
 
 .modal_btn {
@@ -157,37 +164,26 @@ input[type="text"], Select {
   padding: 20px;
 }
 
-.main_data_box {
-  padding: 10px 20px 20px 20px;
+.bold-blue {
+  font-weight: bold;
+  color: rgb(5, 5, 50);
 }
 
-td{
-width:50%;
+td {
+  width: 50%;
 }
-th{
-  width:50%;
+th {
+  width: 50%;
   font-weight: bold;
   text-align: left;
-  }
-
-  .bold-blue {
-    font-weight: bold;
-    color: rgb(5, 5, 50);
-  }
-  
-  .blue-text {
-    color: rgb(5, 5, 50);
-  }
+}
 
 /* Footer css Starts here */
 
 .css-1gx57aq {
-  /* background: var(--chakra-colors-gray-50); */
   background-color: rgb(5, 5, 41) !important;
-  /* color: var(--chakra-colors-gray-700); */
   color: white !important;
-  font-size:20px;
-  height:400px;
-  padding-top:50px;
-
+  font-size: 20px;
+  height: 400px;
+  padding-top: 50px;
 }

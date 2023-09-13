@@ -24,7 +24,7 @@ function Navbar() {
               <li to="#">LAINCHES</li>
               <li to="#">CAREERS</li>
               <li to="#">UPDATES</li>
-              <li to="#">HUMAN SPACEFLIGHT</li>
+              <li to="#">HUMAN SPACEFLIGHT</li>{" "}
             </ul>
           </nav>
         </header>

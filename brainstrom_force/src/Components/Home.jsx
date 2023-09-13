@@ -4,12 +4,11 @@ import {
   Select,
   HStack,
   Image,
-  Text,
   Box,
+  Input,
   GridItem,
   SimpleGrid,
   Button,
-  Input,
   useDisclosure,
   Modal,
   ModalOverlay,
@@ -25,87 +24,121 @@ import Pagination from "./Pagination";
 function Home() {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
-  const [totalpages, setTotalPages] = useState(4);
+  const [totalpages, setTotalPages] = useState(1);
   const [openCapsuleModal, setOpenCapsuleModal] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedCapsule, setSelectedCapsule] = useState(null);
-  const [filterStatus, setFilterStatus] = useState("");
+  const [filterByStatus, setFilterByStatus] = useState("");
+  const [filterByType, setFilterByType] = useState("");
+  const [filterByOriginal_launch, setFilterByOriginal_launch] = useState("");
 
-  async function Getcapsule({ limit, filterStatus, filterType, order, page }) {
+  async function Getcapsule({
+    page,
+    filterByStatus,
+    filterByType,
+    filterByOriginal_launch,
+  }) {
     try {
+      const formattedDate = filterByOriginal_launch
+        ? new Date(filterByOriginal_launch)
+            .toISOString()
+            .split("T")[0]
+            .reverse()
+        : "";
+
+      //  console.log(formattedDate, "dateeeeeeeeeeeeeeeee");
       const response = await axios.get(
-        `https://api.spacexdata.com/v3/capsules?limit=${limit}&status=${filterStatus}&page=${page}`
+        `https://api.spacexdata.com/v3/capsules?status=${filterByStatus}&page=${page}&type=${filterByType}&original_launch=${formattedDate}`
       );
 
       setData(response.data);
       console.log(response.data);
-      setTotalPages(Math.ceil(response.headers["spacex-api-count"] / limit));
+      setTotalPages(Math.ceil(response.headers["spacex-api-count"] / 10));
+
+      setData(response.data.slice((page - 1) * 10, page * 10));
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   }
 
+  // Clear the filter status type and original_launch
+  function clearHandleFilter() {
+    setFilterByStatus("");
+    setFilterByType("");
+    setFilterByOriginal_launch("");
+  }
+
+  // Convert a date format on YYYY-MM-DD function
   function formatDate(dateString) {
     if (!dateString) return "";
-
     const dateParts = dateString.split("T");
     const formattedDate = `${dateParts[0]}`;
-
     return formattedDate;
   }
 
-  //filter function
-  const handleFilter = () => {
-    Getcapsule({ limit, filterStatus, page });
-  };
-
   useEffect(() => {
-    Getcapsule({ limit, filterStatus, page });
-  }, [limit, filterStatus, page]);
+    Getcapsule({
+      page,
+      filterByStatus,
+      filterByType,
+      filterByOriginal_launch,
+    });
+  }, [filterByOriginal_launch, filterByStatus, filterByType, page]);
 
   return (
     <Box as="center" className="main_data_box">
       <Box m={"2rem 0"} display={"flex"} justifyContent={"space-evenly"}>
         <HStack spacing={3}>
-          <Input
-            type="text"
-            variant="outline"
-            placeholder="Filter by Status"
-            value={filterStatus}
-            onChange={(e) => setFilterStatus(e.target.value)}
-          />
-          <Select
-            w={"400px"}
-            variant="unstyled"
-            placeholder="Limit"
-            onChange={(e) => setLimit(e.target.value)}
-          >
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="15">15</option>
-          </Select>
+          {/* filter by status  */}
 
           <Select
-            w={"400px"}
-            variant="unstyled"
-            placeholder="Limit"
-            onChange={(e) => setLimit(e.target.value)}
+            variant="outline"
+            onChange={(e) => setFilterByStatus(e.target.value)}
+            value={filterByStatus}
           >
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="15">15</option>
+            <option value="">Select Status</option>
+            <option value="active">Active</option>
+            <option value="retired">Retired</option>
+            <option value="destroyed">Destroyed</option>
+            <option value="unknown">Unknown</option>
           </Select>
+
+          {/* filter by type  */}
+          <Select
+            variant="outline"
+            onChange={(e) => setFilterByType(e.target.value)}
+            value={filterByType}
+          >
+            <option value="">Select type</option>
+            <option value="Dragon 1.0">Dragon 1.0</option>
+            <option value="Dragon 1.1">Dragon 1.1</option>
+            <option value="Dragon 2.0">Dragon 2.0</option>
+          </Select>
+
+          {/* filter by original launch  */}
+          <Input
+            variant="outline"
+            type="date"
+            onChange={(e) => setFilterByOriginal_launch(e.target.value)}
+            value={filterByOriginal_launch}
+          />
+
+          {/* Clear Filter button */}
+
           <Button
+            w={"300px"}
             backgroundColor="#2B6CB0"
             color="white"
             marginRight="3rem"
-            onClick={handleFilter}
+            onClick={clearHandleFilter}
           >
             Clear Filter
           </Button>
         </HStack>
       </Box>
+
+      {/* start a data container */}
+
       <SimpleGrid
         columns={{ lg: 4, md: 2, sm: 1, base: 1 }}
         justifyContent={"Center"}
@@ -114,25 +147,36 @@ function Home() {
       >
         {data.map((e, index) => {
           return (
-            <Link to={`/capsule/${e.capsule_id}`} key={index}>
+            <Link to={`/capsule/${e.capsule_id}`} key={e.index}>
               <GridItem className="capuslu_div" w="auto" h="auto" p={"1rem"}>
                 <Image
                   src={
                     "https://media.istockphoto.com/id/935294048/vector/the-pill.jpg?s=612x612&w=0&k=20&c=bhhQ6-fT-X1JIMiFPXT5Ogn97fTnpDgcJsvWxAdNDKI="
                   }
                 />
-                <Text className="blue-text">
-                  <strong className="bold-blue">Capsule id:</strong>{" "}
-                  {e.capsule_id}
-                </Text>
-                <Text className="blue-text">
-                  {" "}
-                  <strong className="bold-blue">Type:</strong> {e.type}
-                </Text>
-                <Text className="blue-text">
-                  {" "}
-                  <strong className="bold-blue">Status:</strong> {e.status}
-                </Text>
+
+                <table style={{ width: "60%", marginLeft: "50px" }}>
+                  <tbody>
+                    <tr>
+                      <th style={{ fontSize: "16px" }} className="bold-blue">
+                        Capsule id:
+                      </th>
+                      <td style={{ fontSize: "16px" }}>{e.capsule_id}</td>
+                    </tr>
+                    <tr>
+                      <th style={{ fontSize: "16px" }} className="bold-blue">
+                        Type:
+                      </th>
+                      <td style={{ fontSize: "16px" }}>{e.type}</td>
+                    </tr>
+                    <tr>
+                      <th style={{ fontSize: "16px" }} className="bold-blue">
+                        Status:
+                      </th>
+                      <td style={{ fontSize: "16px" }}>{e.status}</td>
+                    </tr>
+                  </tbody>
+                </table>
 
                 <Button
                   className="modal_btn"
@@ -145,7 +189,7 @@ function Home() {
                 >
                   Details
                 </Button>
-                {openCapsuleModal === index && (
+                {openCapsuleModal === e.capsule_id && (
                   <Modal capsule_id={e.capsule_id} isOpen={true} />
                 )}
               </GridItem>
@@ -154,7 +198,9 @@ function Home() {
         })}
       </SimpleGrid>
 
-      <Box>
+      {/* pagination starts here */}
+
+      <Box marginTop={"30px"}>
         <Pagination totalpages={totalpages} page={page} setPage={setPage} />
       </Box>
 
@@ -164,14 +210,14 @@ function Home() {
         <ModalOverlay
           bg="none"
           backdropFilter="auto"
-          backdropInvert="80%"
+          backdropInvert="17%"
           backdropBlur="2px"
         />
         <ModalContent>
           <ModalHeader backgroundColor="#2B6CB0" color="white">
             Capsule Details
           </ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton color={"white"} marginTop={"10px"} />
           <ModalBody>
             {selectedCapsule && (
               <table style={{ width: "100%" }}>
