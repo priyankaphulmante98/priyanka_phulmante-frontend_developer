@@ -101,6 +101,9 @@ nav ul li a {
   background-color: rgb(5, 5, 41);
 }
 
+
+/* responsivness for 900 screen size */
+
 @media (max-width: 900px) {
   .main-banner-banner-div {
     display: inline-block;
@@ -141,6 +144,7 @@ Select {
   font-size: 14px;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   margin: 30px 0px 0px 0px;
+  transition: transform 0.3s ease-in-out;
 }
 
 .capuslu_div img {
@@ -149,10 +153,10 @@ Select {
   margin: 10px 0px 15px 0px;
   border-radius: 20px;
   border-radius: 20px;
-  transition: transform 0.3s ease-in-out;
+ 
 }
 
-.capuslu_div img:hover {
+.capuslu_div:hover {
   transform: scale(1.05);
 }
 

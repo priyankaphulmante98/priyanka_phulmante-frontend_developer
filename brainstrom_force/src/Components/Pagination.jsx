@@ -3,7 +3,7 @@ import React from "react";
 
 
 function Pagination({ totalpages, page, setPage }) {
-  console.log(totalpages);
+
   const pages = Array(totalpages)
     .fill(0)
     .map((e, i) => (

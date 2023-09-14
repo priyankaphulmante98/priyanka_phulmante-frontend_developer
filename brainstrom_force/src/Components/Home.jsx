@@ -40,22 +40,23 @@ function Home() {
   }) {
     try {
       const formattedDate = filterByOriginal_launch
-        ? new Date(filterByOriginal_launch)
-            .toISOString()
-            .split("T")[0]
-            .reverse()
-        : "";
+        ? new Date(filterByOriginal_launch).toISOString().split("T")[0]
+        : null;
 
-      //  console.log(formattedDate, "dateeeeeeeeeeeeeeeee");
       const response = await axios.get(
-        `https://api.spacexdata.com/v3/capsules?status=${filterByStatus}&page=${page}&type=${filterByType}&original_launch=${formattedDate}`
+        `https://api.spacexdata.com/v3/capsules?status=${filterByStatus}&page=${page}&type=${filterByType}`
       );
 
-      setData(response.data);
-      console.log(response.data);
+      const newdata = formattedDate
+        ? response.data.filter((e) => e.original_launch.includes(formattedDate))
+        : response.data;
+
+      setData(newdata);
+
+      // console.log(response.data);
       setTotalPages(Math.ceil(response.headers["spacex-api-count"] / 10));
 
-      setData(response.data.slice((page - 1) * 10, page * 10));
+      setData(newdata.slice((page - 1) * 10, page * 10));
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -96,7 +97,7 @@ function Home() {
             onChange={(e) => setFilterByStatus(e.target.value)}
             value={filterByStatus}
           >
-            <option value="">Select Status</option>
+            <option value="">Filter By Status</option>
             <option value="active">Active</option>
             <option value="retired">Retired</option>
             <option value="destroyed">Destroyed</option>
@@ -109,7 +110,7 @@ function Home() {
             onChange={(e) => setFilterByType(e.target.value)}
             value={filterByType}
           >
-            <option value="">Select type</option>
+            <option value="">Filter By type</option>
             <option value="Dragon 1.0">Dragon 1.0</option>
             <option value="Dragon 1.1">Dragon 1.1</option>
             <option value="Dragon 2.0">Dragon 2.0</option>
@@ -147,22 +148,16 @@ function Home() {
       >
         {data.map((e, index) => {
           return (
-            <Link to={`/capsule/${e.capsule_id}`} key={e.index}>
+            <Link to={`/capsule/${e.capsule_id}`} key={index}>
               <GridItem className="capuslu_div" w="auto" h="auto" p={"1rem"}>
                 <Image
                   src={
-                    "https://media.istockphoto.com/id/935294048/vector/the-pill.jpg?s=612x612&w=0&k=20&c=bhhQ6-fT-X1JIMiFPXT5Ogn97fTnpDgcJsvWxAdNDKI="
+                    "https://cdn.dribbble.com/users/5649296/screenshots/13917713/media/62ac5cdf298da045656ef31a235981c8.gif"
                   }
                 />
 
                 <table style={{ width: "60%", marginLeft: "50px" }}>
                   <tbody>
-                    <tr>
-                      <th style={{ fontSize: "16px" }} className="bold-blue">
-                        Capsule id:
-                      </th>
-                      <td style={{ fontSize: "16px" }}>{e.capsule_id}</td>
-                    </tr>
                     <tr>
                       <th style={{ fontSize: "16px" }} className="bold-blue">
                         Type:
@@ -175,6 +170,33 @@ function Home() {
                       </th>
                       <td style={{ fontSize: "16px" }}>{e.status}</td>
                     </tr>
+                    {e.original_launch ? (
+                      <>
+                        <tr>
+                          <th
+                            style={{ fontSize: "16px" }}
+                            className="bold-blue"
+                          >
+                            Launch Date:
+                          </th>
+                          <td style={{ fontSize: "16px" }}>
+                            {formatDate(e.original_launch)}
+                          </td>
+                        </tr>
+                      </>
+                    ) : (
+                      <>
+                        <tr>
+                          <th
+                            style={{ fontSize: "16px" }}
+                            className="bold-blue"
+                          >
+                            Capsule ID:
+                          </th>
+                          <td style={{ fontSize: "16px" }}>{e.capsule_id}</td>
+                        </tr>
+                      </>
+                    )}
                   </tbody>
                 </table>
 
@@ -246,9 +268,9 @@ function Home() {
                     <th>Missions:</th>
                     <td></td>
                   </tr>
-                  {selectedCapsule.missions?.map((mission, missionIndex) => (
+                  {selectedCapsule.missions?.map((mission, index) => (
                     <>
-                      <tr key={missionIndex}>
+                      <tr key={index}>
                         <th>Mission Name:</th>
                         <td>{mission?.name}</td>
                       </tr>
