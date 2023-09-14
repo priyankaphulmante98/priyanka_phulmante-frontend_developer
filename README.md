@@ -17,19 +17,17 @@ In this assignment, I created a landing page using React.js to display capsule d
 [Vercel link available here](https://brainstrom-force-kw34ae2dc-priyankaphulmante98.vercel.app)
 
 ## Prview 
-
-![image](https://github.com/priyankaphulmante98/priyanka_phulmante-frontend_developer/assets/103947245/6aace0e1-b4d3-4a2b-a245-cc72bdb33a44)
+![Screenshot (1719)](https://github.com/priyankaphulmante98/priyanka_phulmante-frontend_developer/assets/103947245/da52eda3-0ff5-4615-b8a2-c16208142b05)
 <br />
 
-![image](https://github.com/priyankaphulmante98/priyanka_phulmante-frontend_developer/assets/103947245/10795d5d-8057-4f75-8200-de795d101f13)
+![Screenshot (1722)](https://github.com/priyankaphulmante98/priyanka_phulmante-frontend_developer/assets/103947245/ad8fa331-41d1-4b43-a345-cb8f27a145bf)
 <br />
-
-![image](https://github.com/priyankaphulmante98/priyanka_phulmante-frontend_developer/assets/103947245/d398dfb5-4182-4b79-9098-e3a170c26dfa)
+![Screenshot (1720)](https://github.com/priyankaphulmante98/priyanka_phulmante-frontend_developer/assets/103947245/14e6ea14-f023-4fca-9c04-51c71f65ef4f)
 <br />
-
-![image](https://github.com/priyankaphulmante98/priyanka_phulmante-frontend_developer/assets/103947245/e6f25f4d-3f75-473c-9d68-254de713094b)
+![Screenshot (1724)](https://github.com/priyankaphulmante98/priyanka_phulmante-frontend_developer/assets/103947245/650e2d94-7806-499a-90d9-eb4d55c4003b)
 <br />
-
+![Screenshot (1725)](https://github.com/priyankaphulmante98/priyanka_phulmante-frontend_developer/assets/103947245/292c18e4-3cc9-4615-9b8d-4300e3be0b8f)
+<br />
 ## Run Locally
 
 Clone the project
