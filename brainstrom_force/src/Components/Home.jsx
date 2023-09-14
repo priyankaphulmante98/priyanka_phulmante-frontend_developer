@@ -170,33 +170,12 @@ function Home() {
                       </th>
                       <td style={{ fontSize: "16px" }}>{e.status}</td>
                     </tr>
-                    {e.original_launch ? (
-                      <>
-                        <tr>
-                          <th
-                            style={{ fontSize: "16px" }}
-                            className="bold-blue"
-                          >
-                            Launch Date:
-                          </th>
-                          <td style={{ fontSize: "16px" }}>
-                            {formatDate(e.original_launch)}
-                          </td>
-                        </tr>
-                      </>
-                    ) : (
-                      <>
-                        <tr>
-                          <th
-                            style={{ fontSize: "16px" }}
-                            className="bold-blue"
-                          >
-                            Capsule ID:
-                          </th>
-                          <td style={{ fontSize: "16px" }}>{e.capsule_id}</td>
-                        </tr>
-                      </>
-                    )}
+                    <tr>
+                      <th style={{ fontSize: "16px" }} className="bold-blue">
+                        Capsule ID:
+                      </th>
+                      <td style={{ fontSize: "16px" }}>{e.capsule_id}</td>
+                    </tr>
                   </tbody>
                 </table>
 
